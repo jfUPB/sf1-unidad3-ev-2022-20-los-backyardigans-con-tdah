@@ -1,4 +1,3 @@
-//Código para Unity AyudaaaMe
 using System.Collections;
 using System.Collections.Generic;
 using System.IO.Ports;
@@ -7,17 +6,18 @@ using UnityEngine;
 public class App : MonoBehaviour
 {
     private SerialPort _serialPort;
-    private byte[] buffer;
+    private byte[] buffer; // aquí también podemos inicializar el buffer = new byte[12];
 
     public string strReceived;
      
     public string[] strData = new string[4];
     public string[] strData_received = new string[4];
-    //public float qw, qx, qy, qz; o esta
-    public float x, y, z, w;
+    public float qw, qx, qy, qz; //Usemos la composición para utilizar los ejes
+    //public float x, y, z, w; o esta
     
     private float waitTime = 0.050f;
     private float timer = 0.0f;
+    
     void Start()
     {
         _serialPort = new SerialPort();
@@ -32,28 +32,37 @@ public class App : MonoBehaviour
     
     void Update()
     {
-        _serialPort.Write("s");
         timer += Time.deltaTime;
 
         if (timer > waitTime)
         {
             timer = timer - waitTime;
-            //   _serialPort.Write("ask\n");
-        //if {}
-        strData = strReceived.Split(','); 
+             _serialPort.Write("s");
+            // que pasa si le digo que pregunte con ask y cuando se le pase el comando ask mande el dato
+        }
         
-        if (strData[0] != "" && strData[1] != "" && strData[2] != "")//make sure data are reday
-        //if (_serialPort.BytesToRead => 12)
+        if (_serialPort.BytesToRead >= 12)
         {
-
-            x = float.Parse(strData[0]);
-            y = float.Parse(strData[1]);
-            z = float.Parse(strData[2]);
-
-            //transform.rotation = new Quaternion(x, y, z, w);
-            //transform.rotation = new Quaternion(x, y, z, w);
-            transform.rotation = new Quaternion(-y, -z, x, w);
+           
+            _serialPort.Read(buffer, 0, 12);
+            qx = System.BitConverter.ToSingle(buffer, 0);
+            qy = System.BitConverter.ToSingle(buffer, 4);
+            qz = System.BitConverter.ToSingle(buffer, 8);
+           transform.rotation = new Quaternion(-qy, -qz, qx, qw);
 
         }
+
+        //if (strData[0] != "" && strData[1] != "" && strData[2] != "")//make sure data are reday
+       // {
+
+           // x = float.Parse(strData[0]);
+           // y = float.Parse(strData[1]);
+           // z = float.Parse(strData[2]);
+
+            //transform.rotation = new Quaternion(-qy, -qz, qx, qw);
+            //transform.rotation = new Quaternion(x, y, z, w);
+
+      //  }
     }
+
 }
