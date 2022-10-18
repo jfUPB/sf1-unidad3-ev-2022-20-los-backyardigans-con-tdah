@@ -62,7 +62,7 @@ public class App : MonoBehaviour
             //transform.rotation = new Quaternion(-qy, -qz, qx, qw);
             //transform.rotation = new Quaternion(x, y, z, w);
 
-      //  }
+        //}
     }
 
 }
