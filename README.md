@@ -19,3 +19,4 @@ También hacemos un condicional para que si el serial es igual a “s” envíe 
 
 En el programa de Unity inicializamos los arreglos que reciben la información en los puntos flotantes qx, qy, qz y el qw, a pesar de que el qw no recibe ningún valor ya que solo son 12 bytes, pero aun así debido a que el cuaternion exige 4 puntos flotantes, lo escribimos, solo que queda vacío. 
 
+Luego en el update establecemos con el delta time una condición que, de cumplirse, escribe en el serial la “s” la cual será la señal que el Arduino comparara para enviar los datos cuando el serial lea los 12 bytes. Cuando la condición se cumple, los 3 grupos de cuatro bytes se convierten en un punto flotante, valor que se transforma en el cuaternion.
